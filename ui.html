@@ -1,17 +1,185 @@
-<h2>Rectangle Creator</h2>
-<p>Count: <input id="count" type="number" value="5"></p>
-<button id="create">Create</button>
-<button id="cancel">Cancel</button>
-<script>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Variables to Canvas</title>
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 16px;
+      margin: 0;
+      background: #ffffff;
+    }
+    
+    h2 {
+      margin: 0 0 16px 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: #1e1e1e;
+    }
+    
+    .form-group {
+      margin-bottom: 16px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #1e1e1e;
+    }
+    
+    select {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #e5e5e5;
+      border-radius: 6px;
+      font-size: 12px;
+      background: #ffffff;
+      color: #1e1e1e;
+    }
+    
+    select:focus {
+      outline: none;
+      border-color: #0c8ce9;
+      box-shadow: 0 0 0 2px rgba(12, 140, 233, 0.2);
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    
+    button {
+      flex: 1;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .primary {
+      background: #0c8ce9;
+      color: white;
+    }
+    
+    .primary:hover {
+      background: #0a7bc7;
+    }
+    
+    .primary:disabled {
+      background: #e5e5e5;
+      color: #999;
+      cursor: not-allowed;
+    }
+    
+    .secondary {
+      background: #f5f5f5;
+      color: #1e1e1e;
+    }
+    
+    .secondary:hover {
+      background: #e5e5e5;
+    }
+    
+    .loading {
+      text-align: center;
+      color: #666;
+      font-size: 12px;
+      margin: 8px 0;
+    }
+  </style>
+</head>
+<body>
+  <h2>Variables to Canvas</h2>
+  
+  <div class="form-group">
+    <label for="collection-select">Variable Collection auswählen:</label>
+    <select id="collection-select">
+      <option value="">Collections werden geladen...</option>
+    </select>
+  </div>
+  
+  <div class="loading" id="loading" style="display: none;">
+    Lade Collections...
+  </div>
+  
+  <div class="button-group">
+    <button id="generate" class="primary" disabled>Generate</button>
+    <button id="cancel" class="secondary">Cancel</button>
+  </div>
 
-document.getElementById('create').onclick = () => {
-  const textbox = document.getElementById('count');
-  const count = parseInt(textbox.value, 10);
-  parent.postMessage({ pluginMessage: { type: 'create-shapes', count } }, '*')
-}
+  <script>
+    const collectionSelect = document.getElementById('collection-select');
+    const generateButton = document.getElementById('generate');
+    const cancelButton = document.getElementById('cancel');
+    const loading = document.getElementById('loading');
 
-document.getElementById('cancel').onclick = () => {
-  parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
-}
+    // Plugin startet und lädt Collections
+    parent.postMessage({ pluginMessage: { type: 'load-collections' } }, '*');
 
-</script>
+    // Collection ausgewählt
+    collectionSelect.addEventListener('change', () => {
+      generateButton.disabled = !collectionSelect.value;
+    });
+
+    // Generate Button geklickt
+    generateButton.addEventListener('click', () => {
+      if (collectionSelect.value) {
+        generateButton.disabled = true;
+        generateButton.textContent = 'Generiere...';
+        parent.postMessage({ 
+          pluginMessage: { 
+            type: 'generate-canvas', 
+            collectionId: collectionSelect.value 
+          } 
+        }, '*');
+      }
+    });
+
+    // Cancel Button geklickt
+    cancelButton.addEventListener('click', () => {
+      parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
+    });
+
+    // Nachrichten vom Plugin empfangen
+    window.addEventListener('message', (event) => {
+      const message = event.data.pluginMessage;
+      console.log('UI empfängt Nachricht:', message);
+      
+      if (message.type === 'collections-loaded') {
+        loading.style.display = 'none';
+        collectionSelect.innerHTML = '<option value="">Collection auswählen...</option>';
+        
+        console.log('Collections erhalten:', message.collections);
+        
+        if (message.collections.length === 0) {
+          if (message.error) {
+            collectionSelect.innerHTML = `<option value="">Fehler: ${message.error}</option>`;
+          } else {
+            collectionSelect.innerHTML = '<option value="">Keine Collections gefunden. Erstelle zuerst eine Variable Collection in Figma.</option>';
+          }
+        } else {
+          message.collections.forEach(collection => {
+            console.log('Füge Collection hinzu:', collection.name);
+            const option = document.createElement('option');
+            option.value = collection.id;
+            option.textContent = collection.name;
+            collectionSelect.appendChild(option);
+          });
+        }
+      }
+      
+      if (message.type === 'generation-complete') {
+        generateButton.disabled = false;
+        generateButton.textContent = 'Generate';
+      }
+    });
+  </script>
+</body>
+</html>

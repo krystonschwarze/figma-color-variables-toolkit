@@ -1,0 +1,8 @@
+Variables - Collection Name (HORIZONTAL, No Wrap) ← Modes nebeneinander
+├── Mode Name (VERTICAL, No Wrap) ← untereinander
+│   ├── design (VERTICAL, No Wrap) ← untereinander
+│   │   └── static (VERTICAL, No Wrap) ← untereinander
+│   │       └── alpha-light (HORIZONTAL, No Wrap) ← Variablen nebeneinander!
+│   │           ├── 01 - ModeName (64x64px)
+│   │           ├── 02 - ModeName (64x64px)
+│   │           └── 03 - ModeName (64x64px)
