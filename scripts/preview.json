@@ -1,0 +1,31 @@
+{
+  "width": 340,
+  "height": 480,
+  "messages": [
+    {
+      "type": "collections",
+      "collections": [
+        {
+          "id": "c1",
+          "name": "Primitives",
+          "defaultModeId": "m1",
+          "modes": [{ "id": "m1", "name": "Value" }],
+          "colorCount": 120,
+          "otherCount": 8
+        },
+        {
+          "id": "c2",
+          "name": "Semantic",
+          "defaultModeId": "m2",
+          "modes": [
+            { "id": "m2", "name": "Light" },
+            { "id": "m3", "name": "Dark" }
+          ],
+          "colorCount": 48,
+          "otherCount": 0
+        }
+      ]
+    },
+    { "type": "selection", "selection": { "total": 7, "eligible": 5 } }
+  ]
+}
