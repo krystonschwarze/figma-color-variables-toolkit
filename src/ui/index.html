@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Color Variables Toolkit</title>
+    <!--inject:css-->
+  </head>
+  <body>
+    <div class="fig-view">
+      <header class="fig-header">
+        <span class="fig-header__dot" aria-hidden="true"></span>
+        <h1 class="fig-header__title">Color Variables Toolkit</h1>
+        <span class="fig-header__meta" id="headerMeta"></span>
+      </header>
+
+      <div class="fig-toolbar">
+        <div class="fig-segmented" id="directionSwitch" aria-label="Direction">
+          <button class="fig-segment segment-text" data-value="from-selection">
+            From selection
+          </button>
+          <button class="fig-segment segment-text" data-value="to-canvas">To canvas</button>
+        </div>
+      </div>
+
+      <div class="fig-body">
+        <!-- From selection -->
+        <div class="fig-view" id="screen-from-selection" hidden>
+          <div class="fig-empty" id="generateEmpty" hidden>
+            <svg viewBox="0 0 28 28" fill="none" aria-hidden="true">
+              <circle
+                cx="14"
+                cy="14"
+                r="10"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-dasharray="3 2.5"
+              />
+              <path
+                d="M14 9v10M9 14h10"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+            <p class="fig-empty__text" id="generateEmptyText"></p>
+          </div>
+
+          <div id="generateForm" hidden>
+            <section class="fig-group">
+              <div class="fig-label" id="generateTargetLabel">Collection</div>
+              <div
+                class="fig-segmented"
+                id="generateTargetKind"
+                aria-labelledby="generateTargetLabel"
+              >
+                <button class="fig-segment segment-text" data-value="new">New</button>
+                <button class="fig-segment segment-text" data-value="existing">Existing</button>
+              </div>
+
+              <div class="fig-row" id="newRow">
+                <div class="fig-field">
+                  <input
+                    type="text"
+                    id="newName"
+                    placeholder="Brand colors"
+                    aria-label="New collection name"
+                  />
+                </div>
+              </div>
+
+              <div id="existingRow" hidden>
+                <select
+                  class="fig-select"
+                  id="generateCollection"
+                  aria-label="Existing collection"
+                ></select>
+              </div>
+            </section>
+
+            <section class="fig-group" id="generateModeGroup" hidden>
+              <label class="fig-label" for="generateMode">Mode</label>
+              <select class="fig-select" id="generateMode"></select>
+            </section>
+
+            <section class="fig-group">
+              <div class="fig-label">Options</div>
+              <label class="fig-check">
+                <input type="checkbox" id="bindFills" checked />
+                <span class="fig-check__box" aria-hidden="true">
+                  <svg viewBox="0 0 10 10" fill="none">
+                    <path
+                      d="M2 5.5 4 7.5 8 3"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </span>
+                Bind each layer fill to its variable
+              </label>
+              <p class="fig-hint">
+                Variable names come from the layer names. A slash creates a group, so
+                <code>brand/primary</code> lands in the brand group.
+              </p>
+            </section>
+          </div>
+        </div>
+
+        <!-- To canvas -->
+        <div class="fig-view" id="screen-to-canvas" hidden>
+          <div class="fig-empty" id="canvasEmpty" hidden>
+            <svg viewBox="0 0 28 28" fill="none" aria-hidden="true">
+              <rect
+                x="3"
+                y="3"
+                width="22"
+                height="22"
+                rx="5"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-dasharray="3 2.5"
+              />
+              <path d="M10 14h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+            <p class="fig-empty__text">Create a variable collection in Figma first.</p>
+          </div>
+
+          <div id="canvasForm" hidden>
+            <section class="fig-group">
+              <label class="fig-label" for="canvasCollection">Collection</label>
+              <select class="fig-select" id="canvasCollection"></select>
+              <p class="fig-hint" id="canvasMeta"></p>
+            </section>
+
+            <section class="fig-group">
+              <label class="fig-label" for="swatchSize">Swatch size</label>
+              <div class="fig-row">
+                <div class="fig-field">
+                  <svg viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                    <rect
+                      x="2"
+                      y="2"
+                      width="10"
+                      height="10"
+                      rx="2"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    />
+                    <path d="M2 5h10M5 2v10" stroke="currentColor" stroke-width="1" opacity=".5" />
+                  </svg>
+                  <input type="number" id="swatchSize" min="8" max="400" step="8" />
+                </div>
+              </div>
+              <p class="fig-hint">
+                One column per mode, groups rebuilt from the slashes in the variable names.
+              </p>
+            </section>
+          </div>
+        </div>
+
+        <section class="fig-group" id="noticeGroup" hidden>
+          <div class="fig-notice" id="notice"></div>
+        </section>
+      </div>
+
+      <footer class="fig-footer">
+        <button type="button" class="fig-btn fig-btn--primary" id="generateAction" hidden>
+          Create variables
+        </button>
+        <button type="button" class="fig-btn fig-btn--primary" id="canvasAction" hidden>
+          Generate
+        </button>
+      </footer>
+    </div>
+
+    <!--inject:js-->
+  </body>
+</html>
