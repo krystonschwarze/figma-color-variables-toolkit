@@ -1,13 +1,14 @@
 import './styles.css';
 import { bindSegmented, byId, onPluginMessage, setVisible } from '../../ui-kit/kit.ts';
 import type { Direction, PluginMessage } from '../messages.ts';
-import { clearNotice, setMeta } from './shell.ts';
+import { clearNotice, send, setMeta } from './shell.ts';
 import type { Screen } from './shell.ts';
 import { canvasScreen } from './screens/canvas.ts';
 import { generateScreen } from './screens/generate.ts';
 
 const el = {
   directionSwitch: byId('directionSwitch'),
+  reload: byId<HTMLButtonElement>('reload'),
 };
 
 const screens: Record<Direction, Screen> = {
@@ -36,8 +37,16 @@ const selectDirection = bindSegmented(el.directionSwitch, (value) => {
   render();
 });
 
+/* Re-reads the document without a restart. The screens keep their selection where it still exists. */
+el.reload.addEventListener('click', () => {
+  el.reload.disabled = true;
+  clearNotice();
+  send({ type: 'reload' });
+});
+
 onPluginMessage<PluginMessage>((message) => {
   if (message.type === 'collections') {
+    el.reload.disabled = false;
     for (const screen of Object.values(screens)) screen.onCollections(message.collections);
     return;
   }

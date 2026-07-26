@@ -39,7 +39,9 @@ export interface CanvasOutcome {
 }
 
 export type UiMessage =
-  { type: 'generate'; request: GenerateRequest } | { type: 'canvas'; request: CanvasRequest };
+  | { type: 'reload' }
+  | { type: 'generate'; request: GenerateRequest }
+  | { type: 'canvas'; request: CanvasRequest };
 
 export type PluginMessage =
   | { type: 'collections'; collections: CollectionInfo[] }

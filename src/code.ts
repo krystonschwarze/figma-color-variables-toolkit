@@ -16,6 +16,10 @@ function send(message: PluginMessage): void {
 
 async function handleMessage(message: UiMessage): Promise<void> {
   switch (message.type) {
+    case 'reload':
+      await start();
+      return;
+
     case 'generate': {
       const outcome = await generate.generate(message.request);
       send({ type: 'generate-done', outcome });

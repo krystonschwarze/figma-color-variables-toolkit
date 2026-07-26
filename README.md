@@ -13,6 +13,9 @@ size, both directions always one click away. Aliasing variable groups lives in i
 | **From selection** | layer fills on the canvas | color variables      |
 | **To canvas**      | color variables           | frames on the canvas |
 
+**Reload** in the header re-reads the collections without a restart, for when something changed in
+Figma while the window was open.
+
 Variable group hierarchy lives in the variable name itself, separated by slashes. Both directions read
 that same convention through `src/variables/naming.ts`.
 
